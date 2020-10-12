@@ -1,0 +1,45 @@
+{
+    "name": "makise-co/http-router",
+    "description": "PSR HTTP Router",
+    "keywords": [
+        "psr-15",
+        "psr-7",
+        "http",
+        "router",
+        "middleware",
+        "container",
+        "di",
+        "dependency",
+        "injection",
+        "fast",
+        "route"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=7.4",
+        "psr/http-server-middleware": "^1.0",
+        "psr/container": "^1.0",
+        "nikic/fast-route": "^1.3",
+        "php-di/invoker": "^2.1",
+        "makise-co/middleware": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "MakiseCo\\Http\\Router\\": "src/"
+        },
+        "files": [
+            "src/Internal/functions.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MakiseCo\\Http\\Router\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.4",
+        "guzzlehttp/psr7": "^1.7",
+        "phpstan/phpstan": "^0.12.48",
+        "php-di/php-di": "^6.2"
+    }
+}
