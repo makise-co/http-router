@@ -1,4 +1,4 @@
-# http-router
+# PSR HTTP Router
 A HTTP Router based on FastRoute
 
 ## Requirements
