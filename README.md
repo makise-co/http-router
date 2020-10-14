@@ -45,6 +45,7 @@ Time took: 3.31491995 secs (0.00000110 secs per request)
 ```
 
 Benchmark code can be found [here](examples/benchmark.php).
+* Benchmarks performed on PHP 7.4 with OPcache enabled
 
 ## Usage
 
