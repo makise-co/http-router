@@ -45,7 +45,9 @@ Time took: 3.31491995 secs (0.00000110 secs per request)
 ```
 
 Benchmark code can be found [here](examples/benchmark.php).
-* Benchmarks performed on PHP 7.4 with OPcache enabled
+* Benchmarks were performed on PHP 7.4 with OPcache enabled
+* CPU: Intel Core i7-9750H 6 cores (CPU frequency during benchmarks: 4.07 GHz)
+* OS: Ubuntu 20.04 (WSL 2)
 
 ## Usage
 
@@ -59,8 +61,9 @@ use MakiseCo\Http\Router\RouteCollectorFactory;
 use MakiseCo\Http\Router\RouteCollectorInterface;
 
 $collector = (new RouteCollectorFactory())->create(
-    new Container(), // container that is used to resolve Request Handlers (e.g. Controllers)
-    new Container() // container that is used to inject dependencies into route handlers
+    // container that is used to resolve route handlers
+    // and inject dependencies into route handlers
+    new Container(),
 );
 
 $collector->get('/', function (): Response {

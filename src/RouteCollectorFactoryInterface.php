@@ -14,8 +14,5 @@ use Psr\Container\ContainerInterface;
 
 interface RouteCollectorFactoryInterface
 {
-    public function create(
-        ContainerInterface $controllerContainer,
-        ContainerInterface $appContainer
-    ): RouteCollectorInterface;
+    public function create(ContainerInterface $container): RouteCollectorInterface;
 }

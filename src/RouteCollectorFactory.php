@@ -21,19 +21,17 @@ use Psr\Container\ContainerInterface;
 
 class RouteCollectorFactory implements RouteCollectorFactoryInterface
 {
-    public function create(
-        ContainerInterface $controllerContainer,
-        ContainerInterface $appContainer
-    ): RouteCollector {
+    public function create(ContainerInterface $container): RouteCollector
+    {
         return new RouteCollector(
             new \FastRoute\RouteParser\Std(),
             new \FastRoute\DataGenerator\GroupCountBased(),
             new PhpDiRouteHandlerResolver(
-                new CallableResolver($controllerContainer)
+                new CallableResolver($container)
             ),
             new RouteCompiler(
                 new MiddlewarePipeFactory(
-                    new MiddlewareResolver($controllerContainer)
+                    new MiddlewareResolver($container)
                 ),
                 new PhpDiRouteInvoker(
                     new Invoker(
@@ -42,7 +40,7 @@ class RouteCollectorFactory implements RouteCollectorFactoryInterface
                                 new ParameterResolver\TypeHintResolver(),
                                 new ParameterResolver\AssociativeArrayResolver(),
                                 new ParameterResolver\NumericArrayResolver(),
-                                new ParameterResolver\Container\TypeHintContainerResolver($appContainer),
+                                new ParameterResolver\Container\TypeHintContainerResolver($container),
                                 new ParameterResolver\DefaultValueResolver(),
                             ]
                         ),

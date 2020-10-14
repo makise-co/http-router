@@ -21,7 +21,6 @@ $responseHandler = static function () use ($response): \Psr\Http\Message\Respons
 
 $collector = (new RouteCollectorFactory())->create(
     new Container(),
-    new Container()
 );
 
 $collector->get('/', $responseHandler);
@@ -53,7 +52,6 @@ printf("Time took: %.8f secs (%.8f secs per request)\n\n", $time, $time / ($iter
 
 $collector = getNativeCallRouteCollector(
     new Container(),
-    new Container()
 );
 
 $collector->get('/', $responseHandler);

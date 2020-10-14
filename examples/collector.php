@@ -30,7 +30,6 @@ class UserController
 
 $collector = (new RouteCollectorFactory())->create(
     new Container(),
-    new Container()
 );
 
 $collector->addRoute(['GET'], '/user', function (): Response {

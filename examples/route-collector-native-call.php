@@ -41,17 +41,17 @@ class NativeRouteInvoker implements RouteInvokerInterface
     }
 }
 
-function getNativeCallRouteCollector(Container $controllerContainer, Container $appContainer): RouteCollector
+function getNativeCallRouteCollector(Container $container): RouteCollector
 {
     return new RouteCollector(
         new Std(),
         new GroupCountBased(),
         new PhpDiRouteHandlerResolver(
-            new CallableResolver($controllerContainer)
+            new CallableResolver($container)
         ),
         new RouteCompiler(
             new MiddlewarePipeFactory(
-                new MiddlewareResolver($controllerContainer)
+                new MiddlewareResolver($container)
             ),
             new NativeRouteInvoker()
         ),

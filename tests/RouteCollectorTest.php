@@ -37,7 +37,6 @@ class RouteCollectorTest extends TestCase
 
         $this->collector = (new RouteCollectorFactory())->create(
             new Container(),
-            new Container()
         );
 
         $this->response = static function (ServerRequestInterface $request): Response {
