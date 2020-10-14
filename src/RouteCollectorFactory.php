@@ -24,7 +24,7 @@ class RouteCollectorFactory implements RouteCollectorFactoryInterface
     public function create(
         ContainerInterface $controllerContainer,
         ContainerInterface $appContainer
-    ): RouteCollectorInterface {
+    ): RouteCollector {
         return new RouteCollector(
             new \FastRoute\RouteParser\Std(),
             new \FastRoute\DataGenerator\GroupCountBased(),
@@ -46,10 +46,11 @@ class RouteCollectorFactory implements RouteCollectorFactoryInterface
                                 new ParameterResolver\DefaultValueResolver(),
                             ]
                         ),
-                        $appContainer
+                        null,
                     )
                 )
-            )
+            ),
+            new RouterFactory()
         );
     }
 }

@@ -13,6 +13,7 @@ namespace MakiseCo\Http\Router;
 use FastRoute\DataGenerator;
 use FastRoute\RouteParser;
 
+use function class_exists;
 use function is_string;
 use function mb_strpos;
 use function rtrim;
@@ -39,16 +40,20 @@ class RouteCollector implements RouteCollectorInterface
 
     protected RouteCompilerInterface $routeCompiler;
 
+    protected RouterFactoryInterface $routerFactory;
+
     public function __construct(
         RouteParser $routeParser,
         DataGenerator $dataGenerator,
         HandlerResolver\RouteHandlerResolverInterface $handlerResolver,
-        RouteCompilerInterface $routeCompiler
+        RouteCompilerInterface $routeCompiler,
+        RouterFactoryInterface $routerFactory
     ) {
         $this->handlerResolver = $handlerResolver;
         $this->routeParser = $routeParser;
         $this->dataGenerator = $dataGenerator;
         $this->routeCompiler = $routeCompiler;
+        $this->routerFactory = $routerFactory;
     }
 
     /**
@@ -70,7 +75,7 @@ class RouteCollector implements RouteCollectorInterface
         $routeDatum = $this->routeParser->parse($path);
 
         // Create route handler
-        if (is_string($handler)) {
+        if (is_string($handler) && !class_exists($handler)) {
             $handler = ($this->currentGroupParameters['namespace'] ?? '') . $handler;
         }
 
@@ -189,10 +194,6 @@ class RouteCollector implements RouteCollectorInterface
 
     public function getData(): array
     {
-        foreach ($this->routes as $route) {
-            $this->routeCompiler->compile($route);
-        }
-
         return $this->dataGenerator->getData();
     }
 
@@ -202,6 +203,15 @@ class RouteCollector implements RouteCollectorInterface
     public function getRoutes(): array
     {
         return $this->routes;
+    }
+
+    public function getRouter(): RouterInterface
+    {
+        foreach ($this->routes as $route) {
+            $this->routeCompiler->compile($route);
+        }
+
+        return $this->routerFactory->create($this);
     }
 
     protected function normalizedPath(string $path): string
@@ -220,7 +230,7 @@ class RouteCollector implements RouteCollectorInterface
         $middlewares = (array)($this->currentGroupParameters['middleware'] ?? []);
 
         foreach ($middlewares as $middleware) {
-            $route->addMiddleware($middleware);
+            $route->withMiddleware($middleware);
         }
     }
 }

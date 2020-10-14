@@ -109,7 +109,7 @@ class Route implements RouteInterface
     /**
      * @inheritDoc
      */
-    public function addMiddleware($middleware): self
+    public function withMiddleware($middleware): self
     {
         $this->checkIsCompiled();
 
@@ -123,7 +123,9 @@ class Route implements RouteInterface
      */
     public function compile(array $args): void
     {
-        $this->checkIsCompiled();
+        if ($this->isCompiled) {
+            return;
+        }
 
         $this->isCompiled = true;
 

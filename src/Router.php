@@ -13,9 +13,8 @@ namespace MakiseCo\Http\Router;
 use FastRoute\Dispatcher;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 
-class Router implements RequestHandlerInterface
+class Router implements RouterInterface
 {
     public const ROUTE_ARGS = 'args';
 

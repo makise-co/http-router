@@ -128,9 +128,16 @@ interface RouteCollectorInterface
     public function getRoutes(): array;
 
     /**
-     * Get data for route dispatcher
+     * Get data for fast route dispatcher
      *
      * @return mixed[]
      */
     public function getData(): array;
+
+    /**
+     * Get router instance with routes from collection
+     *
+     * @return RouterInterface
+     */
+    public function getRouter(): RouterInterface;
 }

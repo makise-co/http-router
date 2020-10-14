@@ -11,7 +11,6 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use MakiseCo\Http\Router\RouteCollectorFactory;
 use MakiseCo\Http\Router\RouteCollectorInterface;
-use MakiseCo\Http\Router\Router;
 use MakiseCo\Middleware\ErrorHandlingMiddleware;
 use MakiseCo\Middleware\MiddlewarePipeFactory;
 use Psr\Http\Message\ResponseInterface;
@@ -47,7 +46,7 @@ $collector->addGroup(
                 return new Response(200, [], '228');
             })
             ->setName('api_balance')
-            ->addMiddleware(AddHeaderMiddleware2::class);
+            ->withMiddleware(AddHeaderMiddleware2::class);
 
         $collector->post('/posts', function (ServerRequestInterface $request): Response {
             $body = $request->getParsedBody();
@@ -63,9 +62,7 @@ $collector->addGroup(
     }
 );
 
-$router = new Router(
-    new FastRoute\Dispatcher\GroupCountBased($collector->getData()),
-);
+$router = $collector->getRouter();
 $app = (new MiddlewarePipeFactory())->create([
     new ErrorHandlingMiddleware(new ErrorHandler()), // placing error handling middleware first
     $router

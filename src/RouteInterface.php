@@ -48,7 +48,7 @@ interface RouteInterface
      * @param MiddlewareInterface|string $middleware
      * @return self
      */
-    public function addMiddleware($middleware): self;
+    public function withMiddleware($middleware): self;
 
     /**
      * Compile route
