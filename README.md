@@ -115,4 +115,52 @@ $request = new ServerRequest('GET', '/api/balance');
 $response = $router->handle($request);
 ```
 
-More complete example can be found [here](examples/collector.php).
+## Error handling
+```php
+<?php
+
+declare(strict_types=1);
+
+use GuzzleHttp\Psr7\Response;
+use MakiseCo\Http\Router\Exception\MethodNotAllowedException;
+use MakiseCo\Http\Router\Exception\RouteNotFoundException;
+use MakiseCo\Http\Router\RouteCollectorInterface;
+use MakiseCo\Middleware\ErrorHandlerInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use MakiseCo\Middleware\ErrorHandlingMiddleware;
+
+// It is just an example implementation (a more proper way is to use a response factory)
+class ErrorHandler implements ErrorHandlerInterface
+{
+    public function handle(Throwable $e, ServerRequestInterface $request): ResponseInterface
+    {
+        if ($e instanceof RouteNotFoundException) {
+            return new Response(404, [], $e->getMessage());
+        }
+
+        if ($e instanceof MethodNotAllowedException) {
+            // following https://tools.ietf.org/html/rfc7231#section-6.5.5
+            return new Response(405, ['Allow' => $e->getAllowedMethods()], $e->getMessage());
+        }
+
+        return new Response(500, [], "Internal Server Error<br><br>{$e->getMessage()}");
+    }
+}
+
+$routeCollector->addGroup(
+    '', // '' means the group is applied to "/" scope (all routes scope)
+    [
+        'middleware' => [
+            // adding error handling middleware first
+            new ErrorHandlingMiddleware(new ErrorHandler()),
+            // ...
+        ],
+    ],
+    function (RouteCollectorInterface $routes) {
+        // ...
+    }
+);
+```
+
+More complete examples can be found [here](examples/collector.php).
