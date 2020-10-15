@@ -108,7 +108,8 @@ class RouteCollectorTest extends TestCase
 
                 $routes
                     ->get('/users/{id:\d+}', $this->response)
-                    ->withMiddleware($this->getFakeMiddleware('custom'));
+                    ->withMiddleware($this->getFakeMiddleware('custom'))
+                    ->withMiddleware(TmpMiddleware::class);
             }
         );
 
@@ -121,7 +122,7 @@ class RouteCollectorTest extends TestCase
         self::assertSame(['group'], $response->getHeader('MIDDLEWARE'));
 
         $response = $this->assertSendRequest(new ServerRequest('GET', '/admin/users/1'), $router);
-        self::assertSame(['custom', 'group'], $response->getHeader('MIDDLEWARE'));
+        self::assertSame(['tmp', 'custom', 'group'], $response->getHeader('MIDDLEWARE'));
     }
 
     public function testRouteNotFound(): void
@@ -169,5 +170,17 @@ class RouteCollectorTest extends TestCase
                 return $response->withAddedHeader('MIDDLEWARE', $this->name);
             }
         };
+    }
+}
+
+class TmpMiddleware implements MiddlewareInterface
+{
+    private string $name = 'tmp';
+
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        $response = $handler->handle($request);
+
+        return $response->withAddedHeader('MIDDLEWARE', $this->name);
     }
 }
