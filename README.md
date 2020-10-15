@@ -11,7 +11,7 @@ A PSR HTTP Router based on FastRoute with Middleware support
 * Middlewares
 * Dependency Injection to Route Handlers (through PSR Container and [php-di/invoker](https://github.com/PHP-DI/Invoker))
 * Supports all of most common request handler declarations (Closures, callables, array-callables, class@method, class::method)
-* Strict PSR standards following (each route handler **MUST** return instance of PSR ResponseInterface)
+* Strict PSR standards following (PSR-7 and PSR-15), each route handler **MUST** return instance of PSR ResponseInterface
 * High portability and customization (any implementation part can be replaced with your own implementation)
 
 ## FAQ
