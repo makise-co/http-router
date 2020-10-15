@@ -124,11 +124,10 @@ declare(strict_types=1);
 use GuzzleHttp\Psr7\Response;
 use MakiseCo\Http\Router\Exception\MethodNotAllowedException;
 use MakiseCo\Http\Router\Exception\RouteNotFoundException;
-use MakiseCo\Http\Router\RouteCollectorInterface;
 use MakiseCo\Middleware\ErrorHandlerInterface;
+use MakiseCo\Middleware\ErrorHandlingMiddleware;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use MakiseCo\Middleware\ErrorHandlingMiddleware;
 
 // It is just an example implementation (a more proper way is to use a response factory)
 class ErrorHandler implements ErrorHandlerInterface
@@ -148,19 +147,19 @@ class ErrorHandler implements ErrorHandlerInterface
     }
 }
 
-$routeCollector->addGroup(
-    '', // '' means the group is applied to "/" scope (all routes scope)
-    [
-        'middleware' => [
-            // adding error handling middleware first
-            new ErrorHandlingMiddleware(new ErrorHandler()),
-            // ...
-        ],
-    ],
-    function (RouteCollectorInterface $routes) {
-        // ...
-    }
-);
+$router = $collector->getRouter();
+$app = (new \MakiseCo\Middleware\MiddlewarePipeFactory())->create([
+    new ErrorHandlingMiddleware(new ErrorHandler()), // placing error handling middleware first
+    $router
+]);
+// or
+$app = new \MakiseCo\Middleware\Dispatcher([
+    new ErrorHandlingMiddleware(new ErrorHandler()), // placing error handling middleware first
+    $router
+]);
+// or use any other middleware dispatcher
+
+$response = $app->handle($request);
 ```
 
 More complete examples can be found [here](examples/collector.php).
