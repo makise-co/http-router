@@ -1,8 +1,11 @@
 # PSR HTTP Router
-A HTTP Router with Middleware support based on FastRoute
+A PSR HTTP Router based on FastRoute with Middleware support
 
 ## Requirements
 * PHP >= 7.4
+
+## Installation
+`composer require makise-co/http-router`
 
 ## Features
 * Middlewares
