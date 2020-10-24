@@ -56,4 +56,11 @@ interface RouteInterface
      * @param mixed[] $args
      */
     public function compile(array $args): void;
+
+    /**
+     * Is route compiled?
+     *
+     * @return bool
+     */
+    public function isCompiled(): bool;
 }
