@@ -14,13 +14,20 @@ use Closure;
 
 final class RouteHandlerPromise
 {
+    /**
+     * @var mixed
+     */
+    private $handler;
+
     private Closure $resolve;
 
     /**
+     * @param mixed $handler route handler to be resolved
      * @param Closure $resolve route handler resolve callback
      */
-    public function __construct(Closure $resolve)
+    public function __construct($handler, Closure $resolve)
     {
+        $this->handler = $handler;
         $this->resolve = $resolve;
     }
 
@@ -31,6 +38,14 @@ final class RouteHandlerPromise
      */
     public function __invoke(): Closure
     {
-        return ($this->resolve)();
+        return ($this->resolve)($this->handler);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRouteHandler()
+    {
+        return $this->handler;
     }
 }

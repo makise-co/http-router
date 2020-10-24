@@ -28,9 +28,7 @@ class LazyRouteHandlerResolver implements RouteHandlerResolverInterface
 
     public function resolve($callable): Closure
     {
-        $promise = new RouteHandlerPromise(function () use ($callable) {
-            return $this->resolver->resolve($callable);
-        });
+        $promise = new RouteHandlerPromise($callable, Closure::fromCallable([$this->resolver, 'resolve']));
 
         return Closure::fromCallable($promise);
     }
