@@ -154,7 +154,7 @@ and an instance of ORM will be injected into it.
 ORM can initiate database connections and query for database schema information.
 
 In multi-process app architecture (when your app has master process and many worker processes)
-this may lead to lead to unnecessary resource consumption 
+this may lead to unnecessary resource consumption 
 (database connections draining, memory consumption, slow down application boot time).  
 And it can even lead to an error in the application, especially with Swoole backends, because all non-blocking I/O operations
 MUST be performed in the Coroutine context.
