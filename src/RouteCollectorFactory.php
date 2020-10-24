@@ -29,26 +29,31 @@ class RouteCollectorFactory implements RouteCollectorFactoryInterface
             new PhpDiRouteHandlerResolver(
                 new CallableResolver($container)
             ),
-            new RouteCompiler(
-                new MiddlewarePipeFactory(
-                    new MiddlewareResolver($container)
-                ),
-                new PhpDiRouteInvoker(
-                    new Invoker(
-                        new ParameterResolver\ResolverChain(
-                            [
-                                new ParameterResolver\TypeHintResolver(),
-                                new ParameterResolver\AssociativeArrayResolver(),
-                                new ParameterResolver\NumericArrayResolver(),
-                                new ParameterResolver\Container\TypeHintContainerResolver($container),
-                                new ParameterResolver\DefaultValueResolver(),
-                            ]
-                        ),
-                        null,
-                    )
-                )
-            ),
+            $this->getCompiler($container),
             new RouterFactory()
+        );
+    }
+
+    protected function getCompiler(ContainerInterface $container): RouteCompiler
+    {
+        return new RouteCompiler(
+            new MiddlewarePipeFactory(
+                new MiddlewareResolver($container)
+            ),
+            new PhpDiRouteInvoker(
+                new Invoker(
+                    new ParameterResolver\ResolverChain(
+                        [
+                            new ParameterResolver\TypeHintResolver(),
+                            new ParameterResolver\AssociativeArrayResolver(),
+                            new ParameterResolver\NumericArrayResolver(),
+                            new ParameterResolver\Container\TypeHintContainerResolver($container),
+                            new ParameterResolver\DefaultValueResolver(),
+                        ]
+                    ),
+                    null, // performance optimization
+                )
+            )
         );
     }
 }

@@ -129,10 +129,21 @@ class Route implements RouteInterface
 
         $this->isCompiled = true;
 
+        $handler = $args['handler'] ?? null;
+        // support of lazy handler resolution
+        if ($handler instanceof Closure) {
+            $this->handler = $handler;
+        }
+
         $pipe = $args['pipe'] ?? null;
         if ($pipe instanceof MiddlewarePipe) {
             $this->pipe = $pipe;
         }
+    }
+
+    public function isCompiled(): bool
+    {
+        return $this->isCompiled;
     }
 
     private function checkIsCompiled(): void

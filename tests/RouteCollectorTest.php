@@ -27,21 +27,26 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class RouteCollectorTest extends TestCase
 {
-    private RouteCollector $collector;
+    protected RouteCollector $collector;
 
-    private \Closure $response;
+    protected \Closure $response;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->collector = (new RouteCollectorFactory())->create(
-            new Container(),
-        );
+        $this->collector = $this->createRouteCollector();
 
         $this->response = static function (ServerRequestInterface $request): Response {
             return new Response(200, [], $request->getRequestTarget());
         };
+    }
+
+    protected function createRouteCollector(): RouteCollector
+    {
+        return (new RouteCollectorFactory())->create(
+            new Container(),
+        );
     }
 
     /**
