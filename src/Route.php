@@ -16,7 +16,7 @@ use Psr\Http\Server\MiddlewareInterface;
 
 class Route implements RouteInterface
 {
-    private string $name;
+    private string $name = '';
 
     /**
      * @var string[]
@@ -51,7 +51,6 @@ class Route implements RouteInterface
         string $path,
         Closure $handler
     ) {
-        $this->name = $path;
         $this->methods = $methods;
         $this->path = $path;
         $this->handler = $handler;
