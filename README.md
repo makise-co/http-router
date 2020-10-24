@@ -117,8 +117,8 @@ $response = $router->handle($request);
 
 ## Lazy resolving
 When you write your route handlers using Controllers approach 
-you may want to inject some dependencies to your Controller constructor.
-By default all dependencies will be automatically injected to your controller after you register route.
+you may want to inject some dependencies into your Controller constructor.
+By default, all dependencies will be automatically injected into your controller after you register the route.
 
 This behavior can cause various bugs or even errors in your application.
 Let's imagine your controller class looks like:
@@ -144,7 +144,7 @@ class PostController
 }
 ```
 
-And you registering route for index method of PostController:
+And you are registering a route for the index method of PostController:
 ```php
 $collector->get('/posts', 'PostController@index');
 ```
@@ -153,17 +153,17 @@ After that an instance of your PostController class will be immediately created,
 and an instance of ORM will be injected into it.
 ORM can initiate database connections and query for database schema information.
 
-In multi-process app architecture (when your app has master process and many worker processes)
+In multi-process app architecture (when your app has a master process and many worker processes)
 this may lead to unnecessary resource consumption 
-(database connections draining, memory consumption, slow down application boot time).  
+(draining of database connections, memory consumption, slower application boot time).  
 And it can even lead to an error in the application, especially with Swoole backends, because all non-blocking I/O operations
 MUST be performed in the Coroutine context.
 
-This package offers a simple solution to avoid all kinds of these problems: Lazy route handlers resolution.
+This package offers a simple solution to avoid all kind of these problems: Lazy route handlers resolution.
 Just use `RouteCollectorLazyFactory` instead of `RouteCollectorFactory`.
 
 Instead of immediately resolving the route handlers, this process is postponed until the routes compilation stage.  
-The compilation stage of the routes occurs when you call the "getRouter" method on the "RouteCollector" instance.  
+The compilation stage of the routes occur when you call the "getRouter" method on the "RouteCollector" instance.  
 This means that the route handlers are resolved at the time the "getRouter" method is called.
 
 ## Error handling
