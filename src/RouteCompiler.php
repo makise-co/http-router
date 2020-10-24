@@ -27,6 +27,11 @@ class RouteCompiler implements RouteCompilerInterface
 
     public function compile(RouteInterface $route): void
     {
+        // do not compile already compiled routes
+        if ($route->isCompiled()) {
+            return;
+        }
+
         $handler = $route->getHandler();
         $handlerReflection = new \ReflectionFunction($handler);
         $promisedHandler = null;

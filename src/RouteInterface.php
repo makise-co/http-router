@@ -45,10 +45,39 @@ interface RouteInterface
     public function setName(string $name): self;
 
     /**
+     * Add middleware to route
+     *
      * @param MiddlewareInterface|string $middleware
      * @return self
      */
     public function withMiddleware($middleware): self;
+
+    /**
+     * Add attribute to route
+     *
+     * @param string $key
+     * @param mixed $value
+     *
+     * @return self
+     */
+    public function withAttribute(string $key, $value): self;
+
+    /**
+     * Get route attribute
+     *
+     * @param string $key
+     * @param mixed $default
+     *
+     * @return mixed
+     */
+    public function getAttribute(string $key, $default = null);
+
+    /**
+     * Get route attributes
+     *
+     * @return array<string, mixed>
+     */
+    public function getAttributes(): array;
 
     /**
      * Compile route

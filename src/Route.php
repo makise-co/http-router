@@ -32,6 +32,11 @@ class Route implements RouteInterface
      */
     private array $middlewares = [];
 
+    /**
+     * @var array<string, mixed>
+     */
+    private array $attributes = [];
+
     private ?MiddlewarePipe $pipe = null;
 
     /**
@@ -115,6 +120,23 @@ class Route implements RouteInterface
         $this->middlewares[] = $middleware;
 
         return $this;
+    }
+
+    public function withAttribute(string $key, $value): self
+    {
+        $this->attributes[$key] = $value;
+
+        return $this;
+    }
+
+    public function getAttribute(string $key, $default = null)
+    {
+        return $this->attributes[$key] ?? $default;
+    }
+
+    public function getAttributes(): array
+    {
+        return $this->attributes;
     }
 
     /**

@@ -21,6 +21,21 @@ use Psr\Container\ContainerInterface;
 
 class RouteCollectorFactory implements RouteCollectorFactoryInterface
 {
+    /**
+     * User defined request class aliases for DI
+     *
+     * @var array<class-string>
+     */
+    private array $requestAliases;
+
+    /**
+     * @param array<class-string> $requestAliases
+     */
+    public function __construct(array $requestAliases = [])
+    {
+        $this->requestAliases = $requestAliases;
+    }
+
     public function create(ContainerInterface $container): RouteCollector
     {
         return new RouteCollector(
@@ -52,7 +67,8 @@ class RouteCollectorFactory implements RouteCollectorFactoryInterface
                         ]
                     ),
                     null, // performance optimization
-                )
+                ),
+                $this->requestAliases
             )
         );
     }

@@ -29,7 +29,7 @@ class Router implements RouterInterface
     {
         $routeInfo = $this->dispatcher->dispatch(
             $request->getMethod(),
-            $request->getRequestTarget()
+            $request->getUri()->getPath()
         );
 
         switch ($routeInfo[0]) {

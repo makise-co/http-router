@@ -232,5 +232,10 @@ class RouteCollector implements RouteCollectorInterface
         foreach ($middlewares as $middleware) {
             $route->withMiddleware($middleware);
         }
+
+        $attributes = (array)($this->currentGroupParameters['attributes'] ?? []);
+        foreach ($attributes as $attributeKey => $attributeValue) {
+            $route->withAttribute($attributeKey, $attributeValue);
+        }
     }
 }

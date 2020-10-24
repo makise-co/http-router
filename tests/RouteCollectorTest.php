@@ -18,6 +18,7 @@ use MakiseCo\Http\Router\Exception\RouteNotFoundException;
 use MakiseCo\Http\Router\RouteCollector;
 use MakiseCo\Http\Router\RouteCollectorFactory;
 use MakiseCo\Http\Router\RouteCollectorInterface;
+use MakiseCo\Http\Router\RouteInterface;
 use MakiseCo\Http\Router\RouterInterface;
 use PHPStan\Testing\TestCase;
 use Psr\Http\Message\ResponseInterface;
@@ -128,6 +129,44 @@ class RouteCollectorTest extends TestCase
 
         $response = $this->assertSendRequest(new ServerRequest('GET', '/admin/users/1'), $router);
         self::assertSame(['tmp', 'custom', 'group'], $response->getHeader('MIDDLEWARE'));
+    }
+
+    public function testAttributes(): void
+    {
+        $attrResponse = static function (ServerRequestInterface $request): Response {
+            /** @var RouteInterface $route */
+            $route = $request->getAttribute(RouteInterface::class);
+            $attributes = $route->getAttributes();
+
+            return new Response(200, [], \json_encode($attributes, \JSON_THROW_ON_ERROR));
+        };
+
+        $this->collector
+            ->get('/', $attrResponse)
+            ->withAttribute('root', true);
+
+        $this->collector->addGroup(
+            'admin',
+            ['attributes' => ['group' => 'admin']],
+            function (RouteCollectorInterface $routes) use ($attrResponse) {
+                $routes->get('/users', $attrResponse);
+
+                $routes
+                    ->get('/users/{id:\d+}', $attrResponse)
+                    ->withAttribute('users', true);
+            }
+        );
+
+        $router = $this->collector->getRouter();
+
+        $response = $router->handle(new ServerRequest('GET', '/'));
+        self::assertSame(\json_encode(['root' => true]), $response->getBody()->getContents());
+
+        $response = $router->handle(new ServerRequest('GET', '/admin/users'));
+        self::assertSame(\json_encode(['group' => 'admin']), $response->getBody()->getContents());
+
+        $response = $router->handle(new ServerRequest('GET', '/admin/users/1'));
+        self::assertSame(\json_encode(['group' => 'admin', 'users' => true]), $response->getBody()->getContents());
     }
 
     public function testRouteNotFound(): void

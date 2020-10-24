@@ -9,7 +9,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once 'route-collector-native-call.php';
+require_once 'helpers/route-collector-native-call.php';
 
 use DI\Container;
 use MakiseCo\Http\Router\RouteCollectorFactory;

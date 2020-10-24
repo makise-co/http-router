@@ -87,7 +87,8 @@ $collector->addGroup(
             ->setName('api_balance')
             ->withMiddleware(AddHeaderMiddleware2::class)
             // or
-            ->withMiddleware(new AddHeaderMiddleware2());
+            ->withMiddleware(new AddHeaderMiddleware2())
+            ->withAttribute('auth_permissions', ['customer']);
 
         $collector->post('/posts', function (ServerRequestInterface $request): Response {
             $body = $request->getParsedBody();
