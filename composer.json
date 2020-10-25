@@ -28,7 +28,8 @@
             "MakiseCo\\Http\\Router\\": "src/"
         },
         "files": [
-            "src/Internal/functions.php"
+            "src/Internal/functions.php",
+            "src/Helper/functions.php"
         ]
     },
     "autoload-dev": {

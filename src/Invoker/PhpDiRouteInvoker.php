@@ -20,9 +20,20 @@ class PhpDiRouteInvoker implements RouteInvokerInterface
 {
     private InvokerInterface $invoker;
 
-    public function __construct(InvokerInterface $invoker)
+    /**
+     * @var array<class-string>
+     */
+    private array $requestAliases;
+
+    /**
+     * PhpDiRouteInvoker constructor.
+     * @param InvokerInterface $invoker
+     * @param array<class-string> $requestAliases
+     */
+    public function __construct(InvokerInterface $invoker, array $requestAliases = [])
     {
         $this->invoker = $invoker;
+        $this->requestAliases = $requestAliases;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -34,6 +45,11 @@ class PhpDiRouteInvoker implements RouteInvokerInterface
 
         // bind request
         $args[ServerRequestInterface::class] = $request;
+
+        // bind request to user supplied aliases
+        foreach ($this->requestAliases as $requestAlias) {
+            $args[$requestAlias] = $request;
+        }
 
         return $this->invoker->call($handler, $args);
     }

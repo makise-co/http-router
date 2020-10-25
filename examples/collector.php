@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once 'error_handler.php';
-require_once 'middlewares.php';
+require_once 'helpers/middlewares.php';
 
 use DI\Container;
 use GuzzleHttp\Psr7\Response;
